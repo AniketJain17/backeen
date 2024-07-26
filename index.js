@@ -5,6 +5,8 @@ var cors = require('cors')
 const dotenv = require('dotenv')
 
 const userRoutes = require('./src/routes/User')
+const folderRoutes = require('./src/routes/Folder')
+
 const errorHandler = require('./src/middlewares/errorHandler');
 
 const app = express()
@@ -15,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use(userRoutes)
+app.use(folderRoutes)
 
 app.get('/', (req, res) => {
     res.status(200).send({ status: "success", msg: "API is working well." })
