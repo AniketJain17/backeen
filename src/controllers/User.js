@@ -45,23 +45,30 @@ const updateUser = async (req, res, next) => {
         const userdata = await User.findOne({ _id: userId });
 
         if (userdata) {
-            const updateData = {};
-            if (username) updateData.username = username;
+            const updatedata = {};
+            if (username) updatedata.username = username;
             if (email) {
                 if (await User.findOne({ email: email })) {
                     throw Object.assign(Error("User with this email already exists."), { code: 409 });
                 }
-                updateData.email = email
+                updatedata.email = email
             }
 
             if (newPassword) {
                 if (!await bcrypt.compare(oldPassword, userdata.password)) {
                     throw Object.assign(Error("Your old password seems to be incorrect."), { code: 409 });
                 }
-                updateData.password = await bcrypt.hash(newPassword, 10);
+                if (await bcrypt.compare(oldPassword, userdata.password) == await bcrypt.compare(newPassword, userdata.password)) {
+                    throw Object.assign(Error("New password can not be same as old password."), { code: 409 });
+                }
+                updatedata.password = await bcrypt.hash(newPassword, 10);
             }
 
-            await User.findByIdAndUpdate(userId, updateData);
+            if (Object.keys(updatedata).length === 0) {
+                res.status(200).json({ status: "success", msg: "You have not set anything to updated." });
+            }
+
+            await User.findByIdAndUpdate(userId, updatedata);
             res.status(200).json({ status: "success", msg: "Profile updated successfully." });
         } else {
             throw Object.assign(Error("Not a valid user, please relogin."), { code: 404 });

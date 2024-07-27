@@ -6,8 +6,9 @@ const dotenv = require('dotenv')
 
 const userRoutes = require('./src/routes/User')
 const folderRoutes = require('./src/routes/Folder')
+const formRoutes = require('./src/routes/Form')
 
-const errorHandler = require('./src/middlewares/errorHandler');
+const errorHandler = require('./src/middlewares/errorHandler')
 
 const app = express()
 dotenv.config()
@@ -18,17 +19,18 @@ app.use(bodyParser.json())
 
 app.use(userRoutes)
 app.use(folderRoutes)
+app.use(formRoutes)
 
 app.get('/', (req, res) => {
-    res.status(200).send({ status: "success", msg: "API is working well." })
+    res.status(200).send({ status: "success", msg: "API is working well." });
 })
 
 app.use((req, res, next) => {
     const err = Object.assign(Error("Endpoint not found"), { code: 404 });
     next(err);
-});
+})
 
-app.use(errorHandler);
+app.use(errorHandler)
 
 const port = process.env.PORT || 1000
 app.listen(port, () => {
