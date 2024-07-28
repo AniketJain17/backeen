@@ -2,7 +2,7 @@ const Form = require('../models/Form')
 
 const fetchAllForm = async (req, res, next) => {
     try {
-        const formdata = await Form.find({ userId: req.user });
+        const formdata = await Form.find({ userId: req.user, folderId: null });
         res.status(200).json({ status: "success", data: formdata });
     } catch (err) {
         next(err);
@@ -22,8 +22,8 @@ const fetchFormById = async (req, res, next) => {
 const createForm = async (req, res, next) => {
     try {
         const userId = req.user;
-        const { formName } = req.body;
-        const newForm = await Form.create({ userId, formName, formTheme: 1 });
+        const { folderId, formName } = req.body;
+        const newForm = await Form.create({ userId, folderId, formName, formTheme: 1 });
         res.status(200).json({ status: "success", formId: newForm._id, msg: "Form created successfully." });
     } catch (err) {
         next(err);

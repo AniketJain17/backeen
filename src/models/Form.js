@@ -9,7 +9,7 @@ const formSchema = new mongoose.Schema({
         type: Array
     },
     formTheme: {
-        type: String,
+        type: Number,
         required: true,
     },
     folderId: {
