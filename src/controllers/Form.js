@@ -5,7 +5,7 @@ const fetchAllForm = async (req, res, next) => {
         const formdata = await Form.find({ userId: req.user, folderId: null });
         res.status(200).json({ status: "success", data: formdata });
     } catch (err) {
-        next(err);
+        next(err); 
     }
 }
 
